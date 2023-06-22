@@ -1,0 +1,35 @@
+# OpenSSL to generate a certificate signing requests(csr) configuration file.
+# v1
+
+[ req ]
+# Options for the `req` tool (`man req`).
+# use prompt config control user interactive
+prompt = yes
+
+default_bits        = 4096
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+
+# SHA-1 is deprecated, so use SHA-2 instead.
+default_md          = sha256
+
+# Extension to add when the -x509 option is used.
+#x509_extensions     = v3_ca
+req_extensions     = v3_req
+
+[ req_distinguished_name ]
+# See <https://en.wikipedia.org/wiki/Certificate_signing_request>.
+countryName            					= Country Name (two letter code)
+countryName            					= CN
+stateOrProvinceName 						= State or Province Name (full name)
+stateOrProvinceName_default     = Shanghai
+localityName 										= Locality Name (eg, city)
+localityName_default	          = SH
+organizationName                = Organization Name
+organizationName_default        = My Group
+organizationalUnitName          = Department Name
+organizationalUnitName_default  = Java Development Team 
+commonName 											= Common Name (eg, YOUR name)
+commonName_default							= 
+emailAddress 										= Email Address
+emailAddress_default            = private
