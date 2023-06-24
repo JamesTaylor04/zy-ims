@@ -22,12 +22,14 @@
 
   <groupId>cloud.zhuoya</groupId>
   <artifactId>zy-ims</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>2023.6.1-SNAPSHOT</version>
 
-  <name>zhuoya cloud ims</name>
-  <url>http://www.ruoyi.vip</url>
+  <name>Zhuoya Cloud Intelligent Management System</name>
+  <url>https://github.com/JamesTaylor04/zy-ims</url>
   <description>卓雅云智能管理系统</description>
+  <packaging>pom</packaging>
 
+  <!--开发者-->
   <developers>
     <developer>
       <name>ArisHu</name>
@@ -38,24 +40,38 @@
     </developer>
   </developers>
 
+  <!--权限-->
   <licenses>
     <license>
       <name>MIT</name>
+      <url>https://github.com/JamesTaylor04/zy-ims/blob/main/LICENSE</url>
     </license>
   </licenses>
 
+  <!--属性配置-->
   <properties>
-    <ruoyi.version>1.0.0-SNAPSHOT</ruoyi.version>
+    <zyims.version>2023.6.1-SNAPSHOT</zyims.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>
-    <spring-boot.version>2.7.7</spring-boot.version>
+    <versions-maven-plugin.version>2.15.0</versions-maven-plugin.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+    <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+    <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+    <lombok-maven-plugin.version>1.18.20.0</lombok-maven-plugin.version>
+    <springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
+    <lombok.version>1.18.26</lombok.version>
+    <hutool.version>5.8.20</hutool.version>
+    <spring-boot.version>2.7.12</spring-boot.version>
     <spring-cloud.version>2021.0.5</spring-cloud.version>
     <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
     <nacos.client.version>2.2.2</nacos.client.version>
     <spring-boot-admin.version>2.7.10</spring-boot-admin.version>
-    <swagger.fox.version>3.0.0</swagger.fox.version>
-    <swagger.core.version>1.6.2</swagger.core.version>
+    <!--<swagger.fox.version>3.0.0</swagger.fox.version>-->
+    <!--<swagger.core.version>1.6.2</swagger.core.version>-->
+    <springdoc-openapi.version>1.7.0</springdoc-openapi.version>
     <tobato.version>1.27.2</tobato.version>
     <kaptcha.version>2.3.3</kaptcha.version>
     <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
@@ -68,7 +84,51 @@
     <minio.version>8.2.2</minio.version>
     <poi.version>4.1.2</poi.version>
     <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
+    <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+    <mybatis.version>3.5.13</mybatis.version>
   </properties>
+
+  <!--环境配置-->
+  <profiles>
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <version>1.6</version>
+              <executions>
+                <execution>
+                  <id>signArtifact</id>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>sign</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
+
+  <!--全局依赖-->
+  <dependencies>
+    <!-- bootstrap 启动器 -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-bootstrap</artifactId>
+    </dependency>
+  </dependencies>
 
   <!-- 依赖声明 -->
   <dependencyManagement>
@@ -96,7 +156,7 @@
           </exclusion>
         </exclusions>
       </dependency>
-
+      <!--Nacos客户端-->
       <dependency>
         <groupId>com.alibaba.nacos</groupId>
         <artifactId>nacos-client</artifactId>
@@ -112,6 +172,65 @@
         <scope>import</scope>
       </dependency>
 
+      <!--Mybatis Plus依赖-->
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-boot-starter</artifactId>
+        <version>${mybatis-plus.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus</artifactId>
+        <version>>${mybatis-plus.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-core</artifactId>
+        <version>${mybatis-plus.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-annotation</artifactId>
+        <version>${mybatis-plus.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-extension</artifactId>
+        <version>${mybatis-plus.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mybatis</groupId>
+        <artifactId>mybatis</artifactId>
+        <version>${mybatis.version}</version>
+      </dependency>
+
+      <!--Spring OpenAPI-->
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>${springdoc-openapi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-data-rest</artifactId>
+        <version>${springdoc-openapi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-webflux-ui</artifactId>
+        <version>${springdoc-openapi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-security</artifactId>
+        <version>${springdoc-openapi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-javadoc</artifactId>
+        <version>${springdoc-openapi.version}</version>
+      </dependency>
+
       <!-- FastDFS 分布式文件系统 -->
       <dependency>
         <groupId>com.github.tobato</groupId>
@@ -120,7 +239,7 @@
       </dependency>
 
       <!-- Swagger 依赖配置 -->
-      <dependency>
+      <!--<dependency>
         <groupId>io.swagger</groupId>
         <artifactId>swagger-models</artifactId>
         <version>${swagger.core.version}</version>
@@ -129,7 +248,7 @@
         <groupId>io.swagger</groupId>
         <artifactId>swagger-annotations</artifactId>
         <version>${swagger.core.version}</version>
-      </dependency>
+      </dependency>-->
 
       <!-- 验证码 -->
       <dependency>
@@ -138,7 +257,7 @@
         <version>${kaptcha.version}</version>
       </dependency>
 
-      <!-- pagehelper 分页插件 -->
+      <!-- Page Helper 分页插件 -->
       <dependency>
         <groupId>com.github.pagehelper</groupId>
         <artifactId>pagehelper-spring-boot-starter</artifactId>
@@ -187,86 +306,54 @@
         <version>${transmittable-thread-local.version}</version>
       </dependency>
 
-      <!-- 核心模块 -->
+      <!--Lombok-->
       <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-core</artifactId>
-        <version>${ruoyi.version}</version>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
       </dependency>
 
-      <!-- 接口模块 -->
+      <!--HuTool工具类-->
       <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-swagger</artifactId>
-        <version>${ruoyi.version}</version>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-all</artifactId>
+        <version>${hutool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-core</artifactId>
+        <version>${hutool.version}</version>
       </dependency>
 
-      <!-- 安全模块 -->
+      <!--项目本身依赖-->
       <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-security</artifactId>
-        <version>${ruoyi.version}</version>
+        <groupId>cloud.zhuoya</groupId>
+        <artifactId>zy-ims-common-core</artifactId>
+        <version>${zyims.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cloud.zhuoya</groupId>
+        <artifactId>zy-ims-common-db</artifactId>
+        <version>${zyims.version}</version>
       </dependency>
 
-      <!-- 权限范围 -->
-      <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-datascope</artifactId>
-        <version>${ruoyi.version}</version>
-      </dependency>
 
-      <!-- 多数据源 -->
-      <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-datasource</artifactId>
-        <version>${ruoyi.version}</version>
-      </dependency>
-
-      <!-- 分布式事务 -->
-      <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-seata</artifactId>
-        <version>${ruoyi.version}</version>
-      </dependency>
-
-      <!-- 日志记录 -->
-      <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-log</artifactId>
-        <version>${ruoyi.version}</version>
-      </dependency>
-
-      <!-- 缓存服务 -->
-      <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-common-redis</artifactId>
-        <version>${ruoyi.version}</version>
-      </dependency>
-
-      <!-- 系统接口 -->
-      <dependency>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-api-system</artifactId>
-        <version>${ruoyi.version}</version>
-      </dependency>
 
     </dependencies>
   </dependencyManagement>
 
-  <modules>
-  </modules>
-  <packaging>pom</packaging>
-
-  <dependencies>
-    <!-- bootstrap 启动器 -->
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-bootstrap</artifactId>
-    </dependency>
-  </dependencies>
-
+  <!--构建配置-->
   <build>
+    <!--<resources>
+      <resource>
+        <directory>src/main/java</directory>
+         <excludes>
+           <exclude>module-info.java</exclude>
+         </excludes>
+      </resource>
+    </resources>-->
     <plugins>
+      <!-- Maven编译插件 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -274,11 +361,179 @@
           <source>${java.version}</source>
           <target>${java.version}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
+          <!--&lt;!&ndash;指定预编译器路径 &ndash;&gt;
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+          </annotationProcessorPaths>
+          &lt;!&ndash;排除module-info.java&ndash;&gt;
+          <excludes>
+            <exclude>module-info.java</exclude>
+          </excludes>-->
         </configuration>
       </plugin>
+
+      <!--maven jar插件-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
+        <!--<configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>zy.ims.common.core</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>-->
+      </plugin>
+
+      <!--源码插件-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>gen-source</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--java-doc插件-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <charset>UTF-8</charset>
+        </configuration>
+        <executions>
+          <execution>
+            <id>gen-doc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--测试插件-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <argLine>-Dfile.encoding=UTF-8</argLine>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+
+      <!--版本更新插件-->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+      </plugin>
     </plugins>
+
+    <!--插件版本管理-->
     <pluginManagement>
       <plugins>
+        <!-- Maven编译插件 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+        </plugin>
+
+        <!--Lombok Maven Plugin-->
+        <plugin>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok-maven-plugin</artifactId>
+          <version>${lombok-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>delombok</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!--maven jar插件-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${maven-jar-plugin.version}</version>
+          <!--<configuration>
+            <archive>
+              <manifestEntries>
+                <Automatic-Module-Name>zy.ims.common.core</Automatic-Module-Name>
+              </manifestEntries>
+            </archive>
+          </configuration>-->
+        </plugin>
+
+        <!--源码插件-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${maven-source-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>gen-source</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!--java-doc插件-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${maven-javadoc-plugin.version}</version>
+          <configuration>
+            <charset>UTF-8</charset>
+          </configuration>
+          <executions>
+            <execution>
+              <id>gen-doc</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!--测试插件-->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+          <configuration>
+            <argLine>-Dfile.encoding=UTF-8</argLine>
+            <skipTests>true</skipTests>
+          </configuration>
+        </plugin>
+
+        <!--版本更新插件-->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${versions-maven-plugin.version}</version>
+        </plugin>
+
+        <!--Spring Boot打包软件-->
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
@@ -291,10 +546,26 @@
             </execution>
           </executions>
         </plugin>
+
+        <!--SpringDoc OpenAPI Maven插件-->
+        <plugin>
+          <groupId>org.springdoc</groupId>
+          <artifactId>springdoc-openapi-maven-plugin</artifactId>
+          <version>${springdoc-openapi-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>integration-test</id>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
 
+  <!--依赖仓库-->
   <repositories>
     <repository>
       <id>public</id>
@@ -306,6 +577,7 @@
     </repository>
   </repositories>
 
+  <!--插件仓库-->
   <pluginRepositories>
     <pluginRepository>
       <id>public</id>

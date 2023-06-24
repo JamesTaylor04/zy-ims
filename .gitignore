@@ -44,3 +44,10 @@ nbdist/
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
+/certs/mysql/current/
+/certs/mysql/2023-06-17_20_24_25/
+/certs/ssl/docker-cert.pem
+/certs/cacerts
+/certs/client-cert.p12
+/certs/tructstore.jks
+/trash/
